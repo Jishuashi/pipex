@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 15:20:41 by hchartie          #+#    #+#             */
-/*   Updated: 2025/11/20 17:09:45 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/01/16 15:35:57 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 # define LIBFT_H
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdarg.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
 typedef struct s_list
 {
@@ -64,5 +68,15 @@ void	ft_lstdelone(t_list *lst, void (*del)(void*));
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+char	*ft_get_next_line(int fd);
+char	*ft_gnl_strchr(const char *str, int c);
+int		ft_printf(const	char *s, ...);
+size_t	ft_putchar(int c);
+size_t	ft_putstr(char *str);
+size_t	ft_putnbr(int n);
+size_t	ft_putnbr_usigned(unsigned int nb);
+size_t	ft_print_hex(unsigned int nb, int islower);
+size_t	ft_print_addr(void *ptr);
+size_t	ft_putnbr_long(long nb);
 
 #endif

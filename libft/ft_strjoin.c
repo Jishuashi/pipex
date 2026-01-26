@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 12:32:38 by hchartie          #+#    #+#             */
-/*   Updated: 2025/11/17 14:44:53 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/01/08 12:36:12 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	len;
 	size_t	i;
 
+	if (!s1)
+		return (ft_strdup((char *) s2));
 	len = ft_strlen(s1) + ft_strlen(s2) + 1;
 	res = (char *)malloc(len * sizeof(char));
 	if (!res)

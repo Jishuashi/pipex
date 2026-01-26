@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_putnbr_usigned.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/11 20:45:33 by hchartie          #+#    #+#             */
-/*   Updated: 2026/01/08 13:02:29 by hchartie         ###   ########.fr       */
+/*   Created: 2025/12/01 14:48:31 by hchartie          #+#    #+#             */
+/*   Updated: 2026/01/08 13:13:30 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *str, int c)
+size_t	ft_putnbr_usigned(unsigned int nb)
 {
-	if (c > 255)
-		c %= 256;
-	while (*str)
+	char		c;
+	size_t		res;
+
+	res = 0;
+	if (nb > 9)
+		res += ft_putnbr((nb / 10));
+	else
 	{
-		if (*str == c)
-			break ;
-		str++;
+		c = (nb + 48);
+		write(1, &c, 1);
+		res = 1;
+		return (res);
 	}
-	if (*str == '\0' && c == '\0')
-		return ((char *)str);
-	if (*str == '\0')
-		return (NULL);
-	return ((char *)str);
+	c = (nb % 10 + 48);
+	res++;
+	write(1, &c, 1);
+	return (res);
 }
