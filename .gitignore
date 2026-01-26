@@ -1,0 +1,7 @@
+pipex
+*.a
+.vscode
+a.out
+*.o
+*:Zone.Identifier
+checker_linux
