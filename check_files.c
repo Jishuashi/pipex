@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 13:53:35 by hchartie          #+#    #+#             */
-/*   Updated: 2026/01/29 16:56:16 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/01/29 18:09:53 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,6 @@ static void	create_file(char *path)
 	}
 	else if (pid > 0)
 		wait(NULL);
+	free(args);
+	free(env);
 }

@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:36 by hchartie          #+#    #+#             */
-/*   Updated: 2026/01/29 16:54:26 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/01/29 17:04:54 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 # include <stdio.h>
 
 int		check_files_exist(char *path);
-int		free_all(char **tab, size_t len);
+void	ft_free_all(char **tab, size_t len);
 char	**create_tab(size_t len);
+int		check_files(char *infile, char *outfile);
 
 #endif

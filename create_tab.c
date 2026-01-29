@@ -15,25 +15,12 @@
 char	**create_tab(size_t len)
 {
 	char	**res;
-	size_t	i;
 
 	res = (char **)malloc(sizeof(char *) * len);
 	if (!res)
 	{
 		ft_printf("Error on memory allocation");
 		exit(1);
-	}
-	i = 0;
-	while (i < len)
-	{
-		res[i] = (char *)malloc(sizeof(char) * 150);
-		if (!res[i])
-		{
-			ft_printf("Error on memory allocation");
-			ft_free_all(res, len);
-			exit(1);
-		}
-		i++;
 	}
 	return (res);
 }

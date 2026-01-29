@@ -5,3 +5,5 @@ a.out
 *.o
 *:Zone.Identifier
 checker_linux
+*.txt
+*.sh

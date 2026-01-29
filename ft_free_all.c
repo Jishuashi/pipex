@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 15:59:35 by hchartie          #+#    #+#             */
-/*   Updated: 2026/01/29 16:54:56 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/01/29 18:08:22 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	ft_free_all(char **tab, size_t len)
 	i = 0;
 	while (i < len)
 	{
-		free(tab[i]);
+		if (tab[i])
+			free(tab[i]);
 		i++;
 	}
 	free(tab);
