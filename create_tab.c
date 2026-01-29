@@ -1,21 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   create_tab.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/01/29 14:02:10 by hchartie         ###   ########.fr       */
+/*   Created: 2026/01/29 15:45:36 by hchartie          #+#    #+#             */
+/*   Updated: 2026/01/29 16:06:31 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	main(int ac, char *av[])
+char	**create_tab(size_t len)
 {
-	if (ac < 5)
-		return (1);
-	check_files(av[1], av[4]);
-	return (0);
+	char	**res;
+	size_t	i;
+
+	res = (char **)malloc(sizeof(char *) * len);
+	if (!res)
+	{
+		ft_printf("Error on memory allocation");
+		exit(1);
+	}
+	i = 0;
+	while (i < len)
+	{
+		res[i] = (char *)malloc(sizeof(char) * 150);
+		if (!res[i])
+		{
+			ft_printf("Error on memory allocation");
+			ft_free_all(res, len);
+			exit(1);
+		}
+		i++;
+	}
+	return (res);
 }

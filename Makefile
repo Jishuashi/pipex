@@ -4,7 +4,7 @@ LIBFT = libft
 
 MAIN = pipex.c
 
-SRCS_P = 
+SRCS_P = check_files_exist.c	check_files.c	ft_free_all.c	create_tab.c	\
 
 OBJ_P = $(SRCS_P:%.c=%.o)
 

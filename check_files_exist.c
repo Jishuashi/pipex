@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   check_files_exist.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/01/29 14:02:10 by hchartie         ###   ########.fr       */
+/*   Created: 2026/01/29 13:02:55 by hchartie          #+#    #+#             */
+/*   Updated: 2026/01/29 16:55:06 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	main(int ac, char *av[])
+int	check_files_exist(char *path)
 {
-	if (ac < 5)
-		return (1);
-	check_files(av[1], av[4]);
-	return (0);
+	int	resp;
+
+	resp = access(path, F_OK);
+	if (resp == -1)
+		return (0);
+	return (1);
 }

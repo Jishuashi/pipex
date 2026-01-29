@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   ft_free_all.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/01/29 14:02:10 by hchartie         ###   ########.fr       */
+/*   Created: 2026/01/29 15:59:35 by hchartie          #+#    #+#             */
+/*   Updated: 2026/01/29 16:54:56 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	main(int ac, char *av[])
+void	ft_free_all(char **tab, size_t len)
 {
-	if (ac < 5)
-		return (1);
-	check_files(av[1], av[4]);
-	return (0);
+	size_t	i;
+
+	i = 0;
+	while (i < len)
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
 }
