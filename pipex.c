@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/04 18:43:58 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/04 19:26:46 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,13 @@ static char		**generate_args(char *cmd, char **arg);
 
 int	main(int ac, char *av[])
 {
-	int	check;
-
-	if (ac < 5)
+	if (ac != 5)
 	{
-		ft_printf("./pipex infile \"cmd1\" \"cmd2\" oufile\n");
+		ft_putstr_fd("Not engouh argument", 2);
 		return (1);
 	}
-	check = check_files(av[1], av[4]);
-	if (check == -1)
-		exit(1);
-	else
-		pipex(av[1], av[4], av[2], av[3]);
+	check_files(av[1], av[4]);
+	pipex(av[1], av[4], av[2], av[3]);
 	return (0);
 }
 
@@ -53,16 +48,7 @@ static void	pipex(char *infile, char *outfile, char *cmd1, char *cmd2)
 	pid2 = ft_execute(cmd2, get_nb_arg(cmd1), fdpipe[0], file);
 	ft_close(file, fdpipe[0]);
 	ft_close(fdpipe[0], fdpipe[1]);
-	if (waitpid(pid1, NULL, 0) == -1)
-	{
-		perror("waitpid");
-		exit(1);
-	}
-	if (waitpid(pid2, NULL, 0) == -1)
-	{
-		perror("waitpid");
-		exit(1);
-	}
+	check_pid(pid1, pid2);
 }
 
 static pid_t	ft_execute(char *cmd, size_t nb_arg, int in_fd, int out_fd)
