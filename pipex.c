@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/04 18:37:18 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/04 18:43:58 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,32 @@ int	main(int ac, char *av[])
 static void	pipex(char *infile, char *outfile, char *cmd1, char *cmd2)
 {
 	int		fdpipe[2];
-	int		file1;
-	int		file2;
+	int		file;
 	pid_t	pid1;
 	pid_t	pid2;
 
-	pipe(fdpipe);
-	file1 = open(infile, O_RDONLY);
-	pid1 = ft_execute(cmd1, get_nb_arg(cmd1), file1, fdpipe[1]);
-	ft_close(file1, fdpipe[1]);
-	file2 = open(outfile, O_WRONLY | O_CREAT | O_TRUNC);
-	pid2 = ft_execute(cmd2, get_nb_arg(cmd1), fdpipe[0], file2);
-	ft_close(file2, fdpipe[0]);
+	if (pipe(fdpipe))
+	{
+		perror("pipe");
+		exit(1);
+	}
+	file = open(infile, O_RDONLY);
+	pid1 = ft_execute(cmd1, get_nb_arg(cmd1), file, fdpipe[1]);
+	ft_close(file, fdpipe[1]);
+	file = open(outfile, O_WRONLY | O_CREAT | O_TRUNC);
+	pid2 = ft_execute(cmd2, get_nb_arg(cmd1), fdpipe[0], file);
+	ft_close(file, fdpipe[0]);
 	ft_close(fdpipe[0], fdpipe[1]);
 	if (waitpid(pid1, NULL, 0) == -1)
+	{
 		perror("waitpid");
+		exit(1);
+	}
 	if (waitpid(pid2, NULL, 0) == -1)
+	{
 		perror("waitpid");
+		exit(1);
+	}
 }
 
 static pid_t	ft_execute(char *cmd, size_t nb_arg, int in_fd, int out_fd)

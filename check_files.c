@@ -6,37 +6,31 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 13:53:35 by hchartie          #+#    #+#             */
-/*   Updated: 2026/01/29 19:05:16 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/04 19:01:42 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+#include <errno.h>
+#include <string.h>
 
 int	check_files(char *infile, char *outfile)
 {
 	int	res;
 
 	res = 0;
-	if (check_files_exist(infile))
+	if (access(infile, F_OK) == -1)
 	{
-		if (!access(infile, R_OK) == 0)
-		{
-			ft_printf("-bash: %s: Permission denied", infile);
-			res = -1;
-		}
-	}
-	else
-	{
+		ft_printf("pipex: %s: %s\n", infile, strerror(errno));
 		res = -1;
-		ft_printf("-bash: %s: No such file or directory", infile);
 	}
-	if (check_files_exist(outfile))
+	else if (access(infile, R_OK) == -1)
 	{
-		if (!access(infile, W_OK) == 0)
-		{
-			ft_printf("-bash: %s: Permission denied", outfile);
-			exit(1);
-		}
+		ft_printf("pipex: %s: %s\n", infile, strerror(errno));
+		res = -1;
 	}
+	if (access(outfile, F_OK) == 0 && access(outfile, W_OK) == -1)
+		ft_printf("pipex: %s: %s\n", outfile, strerror(errno));
 	return (res);
 }
