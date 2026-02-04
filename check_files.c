@@ -6,13 +6,11 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 13:53:35 by hchartie          #+#    #+#             */
-/*   Updated: 2026/01/29 18:09:53 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/01/29 19:05:16 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-static void	create_file(char *path);
 
 int	check_files(char *infile, char *outfile)
 {
@@ -32,35 +30,13 @@ int	check_files(char *infile, char *outfile)
 		res = -1;
 		ft_printf("-bash: %s: No such file or directory", infile);
 	}
-	if (!check_files_exist(outfile))
-		create_file(outfile);
-	return (res);
-}
-
-static void	create_file(char *path)
-{
-	pid_t	pid;
-	char	*bin_path;
-	char	**args;
-	char	**env;
-
-	bin_path = "/bin/touch";
-	args = create_tab(3);
-	env = create_tab(1);
-	if (!args)
-		exit(1);
-	args[0] = bin_path;
-	args[1] = path;
-	args[2] = NULL;
-	env[0] = NULL;
-	pid = fork();
-	if (pid == 0)
+	if (check_files_exist(outfile))
 	{
-		execve(bin_path, args, env);
-		perror("execve");
+		if (!access(infile, W_OK) == 0)
+		{
+			ft_printf("-bash: %s: Permission denied", outfile);
+			exit(1);
+		}
 	}
-	else if (pid > 0)
-		wait(NULL);
-	free(args);
-	free(env);
+	return (res);
 }

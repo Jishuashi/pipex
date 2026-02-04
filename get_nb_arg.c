@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_all.c                                      :+:      :+:    :+:   */
+/*   get_nb_arg.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/29 15:59:35 by hchartie          #+#    #+#             */
-/*   Updated: 2026/01/29 18:08:22 by hchartie         ###   ########.fr       */
+/*   Created: 2026/01/29 19:29:21 by hchartie          #+#    #+#             */
+/*   Updated: 2026/02/04 00:24:49 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	ft_free_all(char **tab, size_t len)
+size_t	get_nb_arg(char *cmd)
 {
-	size_t	i;
+	char		**cmd_split;
+	size_t		res;
+	size_t		i;
 
+	cmd_split = ft_split(cmd, ' ');
 	i = 0;
-	while (i < len)
-	{
-		if (tab[i])
-			free(tab[i]);
+	while (cmd_split[i] != NULL)
 		i++;
-	}
-	free(tab);
+	res = i;
+	ft_free_all(cmd_split, res);
+	return (res);
 }
