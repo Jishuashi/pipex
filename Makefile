@@ -1,5 +1,7 @@
 NAME = pipex
 
+LIB = pipex.a
+
 LIBFT = libft
 
 MAIN = pipex.c
@@ -14,7 +16,7 @@ CFLAGS = -Wall -Wextra -Werror -g
 all : $(NAME)
 
 $(NAME): makelib
-	cc $(CFLAGS) $(MAIN) $(NAME).a -o $(NAME)
+	cc $(CFLAGS) $(MAIN) $(LIB) -o $(NAME)
 
 makelib: $(OBJ_P)
 	$(MAKE) -C $(LIBFT) all
@@ -27,6 +29,7 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
+	rm -f $(LIB)
 	$(MAKE) -C $(LIBFT) fclean
 
 re: fclean clean all

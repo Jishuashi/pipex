@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/04 19:26:46 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/09 16:19:24 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	pipex(char *infile, char *outfile, char *cmd1, char *cmd2)
 	file = open(infile, O_RDONLY);
 	pid1 = ft_execute(cmd1, get_nb_arg(cmd1), file, fdpipe[1]);
 	ft_close(file, fdpipe[1]);
-	file = open(outfile, O_WRONLY | O_CREAT | O_TRUNC);
+	file = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	pid2 = ft_execute(cmd2, get_nb_arg(cmd1), fdpipe[0], file);
 	ft_close(file, fdpipe[0]);
 	ft_close(fdpipe[0], fdpipe[1]);
