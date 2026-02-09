@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/09 16:19:24 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/09 17:32:23 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,24 @@ static char		**generate_args(char *cmd, char **arg);
 
 int	main(int ac, char *av[])
 {
+	int	file;
+	int	null_file;
+
 	if (ac != 5)
 	{
 		ft_putstr_fd("Not engouh argument", 2);
 		return (1);
 	}
-	check_files(av[1], av[4]);
-	pipex(av[1], av[4], av[2], av[3]);
+	if (check_files(av[1], av[4]) == 1)
+		pipex(av[1], av[4], av[2], av[3]);
+	else
+	{
+		null_file = open("/dev/null", O_RDONLY);
+		file = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0664);
+		ft_execute(av[3], get_nb_arg(av[3]), null_file, file);
+		close(file);
+		return (1);
+	}
 	return (0);
 }
 

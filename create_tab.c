@@ -19,7 +19,7 @@ char	**create_tab(size_t len)
 	res = (char **)malloc(sizeof(char *) * len);
 	if (!res)
 	{
-		ft_printf("Error on memory allocation");
+		ft_putstr_fd("Error on memory allocation", 2);
 		exit(1);
 	}
 	return (res);
