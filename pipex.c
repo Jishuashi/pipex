@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/09 17:32:23 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/10 01:10:29 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ static char		**generate_args(char *cmd, char **arg);
 
 int	main(int ac, char *av[])
 {
-	int	file;
-	int	null_file;
+	int		file;
+	int		null_file;
+	pid_t	pid;
 
 	if (ac != 5)
 	{
@@ -29,13 +30,18 @@ int	main(int ac, char *av[])
 	}
 	if (check_files(av[1], av[4]) == 1)
 		pipex(av[1], av[4], av[2], av[3]);
+	else if (check_files(av[1], av[4]) == -1)
+	{
+		exit(1);
+	}
 	else
 	{
 		null_file = open("/dev/null", O_RDONLY);
 		file = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0664);
-		ft_execute(av[3], get_nb_arg(av[3]), null_file, file);
+		pid = ft_execute(av[3], get_nb_arg(av[3]), null_file, file);
 		close(file);
-		return (1);
+		check_err_pid(pid);
+		return (0);
 	}
 	return (0);
 }
@@ -68,6 +74,7 @@ static pid_t	ft_execute(char *cmd, size_t nb_arg, int in_fd, int out_fd)
 	char	**env;
 	pid_t	pid;
 
+	cmd_is_empty(cmd);
 	pid = fork();
 	arg = NULL;
 	env = NULL;
@@ -82,7 +89,7 @@ static pid_t	ft_execute(char *cmd, size_t nb_arg, int in_fd, int out_fd)
 		if (execve(arg[0], arg, env) == -1)
 		{
 			perror("execve");
-			exit(1);
+			exit(127);
 		}
 		ft_free_all(env, 1);
 		ft_free_all(arg, nb_arg);
@@ -90,13 +97,11 @@ static pid_t	ft_execute(char *cmd, size_t nb_arg, int in_fd, int out_fd)
 	return (pid);
 }
 
-
 static	void	ft_close(int file1, int file2)
 {
 	close(file1);
 	close(file2);
 }
-
 
 static	char	**generate_args(char *cmd, char **arg)
 {

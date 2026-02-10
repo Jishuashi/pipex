@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/04 19:20:38 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/04 19:25:19 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/10 00:49:30 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,30 @@ void	check_pid(pid_t pid1, pid_t pid2)
 	int	status1;
 	int	status2;
 
-
-	if (waitpid(pid2, &status1, 0) == -1)
+	if (waitpid(pid1, &status1, 0) == -1)
 	{
 		perror("waitpid");
 		exit(1);
 	}
-	if (waitpid(pid1, &status2, 0) == -1)
+	if (waitpid(pid2, &status2, 0) == -1)
 	{
 		perror("waitpid");
 		exit(1);
 	}
-	check_status(status1);
 	check_status(status2);
+	exit(status2);
+}
+
+void	check_err_pid(pid_t pid)
+{
+	int	status;
+
+	if (waitpid(pid, &status, 0) == -1)
+	{
+		perror("waitpid");
+		exit(1);
+	}
+	check_status(status);
 }
 
 static	void	check_status(int status)
