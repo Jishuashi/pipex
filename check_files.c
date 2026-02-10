@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 13:53:35 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/10 01:02:14 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/10 01:59:53 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,19 @@
 #include <errno.h>
 #include <string.h>
 
+/**
+ * @brief Check:
+ * 
+ * If the infile exist and can be read if not return 1 to execute only cmd2
+ * 
+ * If the outfile exist and can be edited if not return -1 to exit
+ * with code 1
+ * 
+ * In case of an error print errno on the stderr
+ * @param infile 
+ * @param outfile 
+ * @return int 
+ */
 int	check_files(char *infile, char *outfile)
 {
 	if (access(outfile, F_OK) == 0 && access(outfile, W_OK) == -1)

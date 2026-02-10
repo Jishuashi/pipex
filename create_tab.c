@@ -12,6 +12,13 @@
 
 #include "pipex.h"
 
+/**
+ * @brief Create a double-entry table in the 
+ * memory 
+ * 
+ * @param len The len of the collumn
+ * @return char** An alloued double-entry tab
+ */
 char	**create_tab(size_t len)
 {
 	char	**res;
