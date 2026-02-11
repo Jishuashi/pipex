@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:36 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/11 14:22:26 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/11 15:36:44 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include <errno.h>
+# include <string.h>
 
 void	ft_free_all(char **tab, size_t len);
 char	**create_tab(size_t len);

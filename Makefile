@@ -6,9 +6,7 @@ LIBFT = libft
 
 MAIN = pipex.c
 
-SRCS_P =	check_files.c		ft_free_all.c	create_tab.c	\
-			get_nb_arg.c		check_pid.c		cmd_is_empty.c	\
-			utils.c
+SRCS_P =	check_pid.c		utils.c		utils_2.c
 
 OBJ_P = $(SRCS_P:%.c=%.o)
 

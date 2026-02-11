@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_files.c                                      :+:      :+:    :+:   */
+/*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/29 13:53:35 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/10 15:20:08 by hchartie         ###   ########.fr       */
+/*   Created: 2026/02/11 15:34:33 by hchartie          #+#    #+#             */
+/*   Updated: 2026/02/11 15:37:42 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-#include <errno.h>
-#include <string.h>
 
 /**
  * @brief Check:
@@ -49,4 +46,62 @@ int	check_files(char *infile, char *outfile)
 		return (0);
 	}
 	return (1);
+}
+
+/**
+ * @brief Check if the cmd is empty and
+ * return code 127 command not found if the 
+ * command is empty
+ * 
+ * @param cmd 
+ */
+void	cmd_is_empty(char *cmd)
+{
+	if (cmd[0] == '\0')
+	{
+		ft_putstr_fd(" : command not found\n", 2);
+		exit(127);
+	}
+}
+
+/**
+ * @brief Create a double-entry table in the 
+ * memory 
+ * 
+ * @param len The len of the collumn
+ * @return char** An alloued double-entry tab
+ */
+char	**create_tab(size_t len)
+{
+	char	**res;
+
+	res = (char **)malloc(sizeof(char *) * len);
+	if (!res)
+	{
+		ft_putstr_fd("Error on memory allocation", 2);
+		exit(1);
+	}
+	return (res);
+}
+
+
+/**
+ * @brief Free all value of a double-entry char tab
+ * with tab itself 
+ * 
+ * @param tab The tab to free
+ * @param len The number of collumn
+ */
+void	ft_free_all(char **tab, size_t len)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < len)
+	{
+		if (tab[i])
+			free(tab[i]);
+		i++;
+	}
+	free(tab);
 }
