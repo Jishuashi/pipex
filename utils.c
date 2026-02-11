@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 15:22:44 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/10 15:59:42 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/11 14:49:07 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	**generate_args(char *cmd, char **arg)
 	size_t	nb_args;
 
 	cmd_split = ft_split(cmd, ' ');
-	path = ft_strjoin("/usr/bin/", cmd_split[0]);
+	path = check_cmd(cmd_split[0]);
 	nb_args = get_nb_arg(cmd);
 	arg = create_tab(nb_args);
 	i = 0;
@@ -62,4 +62,22 @@ char	**make_env(char *env_arg, char **env)
 	env[0] = env_arg;
 	env[1] = NULL;
 	return (env);
+}
+
+/**
+ * @brief Check if the command is full path name or relative 
+ * path name or just command name
+ * 
+ * @param cmd The command to check
+ * @return char* The path of the command
+ */
+char	*check_cmd(char *cmd)
+{
+	char	*res;
+
+	if (ft_strchr(cmd, 47) != NULL)
+		res = ft_strdup(cmd);
+	else
+		res = ft_strjoin("/bin/", cmd);
+	return (res);
 }

@@ -8,3 +8,4 @@ checker_linux
 *.txt
 *.sh
 42_pipex_tester
+testcmd

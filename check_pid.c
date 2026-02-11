@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/04 19:20:38 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/10 15:42:38 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/10 19:43:26 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@ static	void	check_status(int status);
  * @param pid1 PID of the first child process.
  * @param pid2 PID of the second child process.
  */
-void	check_pid(pid_t pid1, pid_t pid2)
+void	check_pid(pid_t pid[2])
 {
 	int	status1;
 	int	status2;
 
-	if (waitpid(pid1, &status1, 0) == -1)
+	if (waitpid(pid[0], &status1, 0) == -1)
 	{
 		perror("waitpid");
 		exit(1);
 	}
-	if (waitpid(pid2, &status2, 0) == -1)
+	if (waitpid(pid[1], &status2, 0) == -1)
 	{
 		perror("waitpid");
 		exit(1);

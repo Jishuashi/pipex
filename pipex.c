@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/10 15:48:10 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/11 14:32:42 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void		pipex(char *infile, char *outfile, char *cmd1, char *cmd2);
 static pid_t	ft_execute(char *cmd, size_t nb_arg, int in_fd, int out_fd);
 static void		pipex_err(char *cmd2, char *outfile);
-static void	ft_execute_sleep(char *cmd, size_t nb_arg);
+static void		ft_execute_sleep(char *cmd, size_t nb_arg);
 
 /**
  * @brief Entry of the program check files acess
@@ -38,6 +38,7 @@ int	main(int ac, char *av[])
 		ft_putstr_fd("Not engouh argument", 2);
 		return (1);
 	}
+	check_cmd(av[2]);
 	if (check_files(av[1], av[4]) == 1)
 		pipex(av[1], av[4], av[2], av[3]);
 	else if (check_files(av[1], av[4]) == -1)
@@ -71,25 +72,21 @@ int	main(int ac, char *av[])
  */
 static void	pipex(char *infile, char *outfile, char *cmd1, char *cmd2)
 {
-	int		fdpipe[2];
-	int		file;
-	pid_t	pid1;
-	pid_t	pid2;
+	int		p_fd[2];
+	int		f[2];
+	pid_t	pid[2];
 
-	if (pipe(fdpipe))
-	{
-		perror("pipe");
+	if (pipe(p_fd) == -1)
 		exit(1);
-	}
-	file = open(infile, O_RDONLY);
-	pid1 = ft_execute(cmd1, get_nb_arg(cmd1), file, fdpipe[1]);
-	ft_close(file, fdpipe[1]);
-	file = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-	cmd_is_empty(cmd2);
-	pid2 = ft_execute(cmd2, get_nb_arg(cmd1), fdpipe[0], file);
-	ft_close(file, fdpipe[0]);
-	ft_close(fdpipe[0], fdpipe[1]);
-	check_pid(pid1, pid2);
+	f[0] = open(infile, O_RDONLY);
+	pid[0] = ft_execute(cmd1, get_nb_arg(cmd1), f[0], p_fd[1]);
+	close(f[0]);
+	close(p_fd[1]);
+	f[1] = open(outfile, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	pid[1] = ft_execute(cmd2, get_nb_arg(cmd2), p_fd[0], f[1]);
+	close(f[1]);
+	close(p_fd[0]);
+	check_pid(pid);
 }
 
 /**
@@ -147,11 +144,10 @@ static void	pipex_err(char *cmd2, char *outfile)
 
 static void	ft_execute_sleep(char *cmd, size_t nb_arg)
 {
-	pid_t	pid;
 	char	**arg;
 	char	**env;
 
-	pid = fork();
+	fork();
 	arg = NULL;
 	env = create_tab(2);
 	env = make_env("LC_COLLATE=en_US.UTF-8", env);
