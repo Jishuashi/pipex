@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/11 16:35:11 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/11 16:50:27 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ static pid_t	ft_execute(char *cmd, int in_fd, int out_fd)
 	char	**env;
 	pid_t	pid;
 
+	cmd_is_empty(cmd);
 	pid = fork();
 	arg = NULL;
 	if (pid == 0)
