@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/11 16:50:27 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/11 17:37:39 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void		pipex(char *infile, char *outfile, char *cmd1, char *cmd2);
 static pid_t	ft_execute(char *cmd, int in_fd, int out_fd);
 static void		pipex_err(char *cmd2, char *outfile);
-static void		ft_execute_sleep(char *cmd);
+static pid_t	ft_execute_sleep(char *cmd);
 
 /**
  * @brief Entry of the program check files acess
@@ -33,24 +33,27 @@ static void		ft_execute_sleep(char *cmd);
  */
 int	main(int ac, char *av[])
 {
+	int		check;
+	pid_t	pid;
+
 	if (ac != 5)
 	{
 		ft_putstr_fd("Not engouh argument", 2);
 		return (1);
 	}
-	if (check_files(av[1], av[4]) == 1)
+	check = check_files(av[1], av[4]);
+	if (check == 1)
 		pipex(av[1], av[4], av[2], av[3]);
-	else if (check_files(av[1], av[4]) == -1)
+	else if (check == -1)
 	{
-		if (!ft_strnstr(av[2], "sleep", get_nb_arg(av[2])))
-		{
-			ft_execute_sleep(av[2]);
-		}
-		else if (!ft_strnstr(av[3], "sleep", get_nb_arg(av[3])))
-		{
-			ft_execute_sleep(av[3]);
-		}
-		return (1);
+		pid = -1;
+		if (ft_strnstr(av[2], "sleep", ft_strlen(av[2])))
+			pid = ft_execute_sleep(av[2]);
+		else if (ft_strnstr(av[3], "sleep", ft_strlen(av[3])))
+			pid = ft_execute_sleep(av[3]);
+		if (pid > 0)
+			waitpid(pid, NULL, 0);
+		exit (1);
 	}
 	else
 		pipex_err(av[3], av[4]);
@@ -126,6 +129,12 @@ static pid_t	ft_execute(char *cmd, int in_fd, int out_fd)
 	return (pid);
 }
 
+/**
+ * @brief Execute the cmd2 if an error occur in infile
+ * 
+ * @param cmd2 The second command of the pipex program
+ * @param outfile The outfile of the cmd
+ */
 static void	pipex_err(char *cmd2, char *outfile)
 {
 	int		file;
@@ -140,22 +149,34 @@ static void	pipex_err(char *cmd2, char *outfile)
 	check_err_pid(pid);
 }
 
-static void	ft_execute_sleep(char *cmd)
+/**
+ * @brief Exectue a sleep command if present
+ * in cmd1 or cmd2 if an error occur
+ * 
+ * @param cmd The spleep cmd with arg
+ */
+static pid_t	ft_execute_sleep(char *cmd)
 {
 	char	**arg;
 	char	**env;
+	pid_t	pid;
 
-	fork();
-	arg = NULL;
-	env = create_tab(2);
-	env = make_env("LC_COLLATE=en_US.UTF-8", env);
-	arg = generate_args(cmd, arg);
-	if (execve(arg[0], arg, env) == -1)
+	pid = fork();
+	if (pid == -1)
+		return (-1);
+	if (pid == 0)
 	{
-		perror("execve");
-		exit_child(arg, env);
+		env = create_tab(2);
+		env = make_env("LC_COLLATE=en_US.UTF-8", env);
+		arg = NULL;
+		arg = generate_args(cmd, arg);
+		if (execve(arg[0], arg, env) == -1)
+		{
+			perror("execve");
+			exit_child(arg, env);
+		}
+		ft_free_all(env);
+		ft_free_all(arg);
 	}
-	ft_free_all(env);
-	ft_free_all(arg);
-	exit(1);
+	return (pid);
 }
