@@ -6,7 +6,8 @@ LIBFT = libft
 
 MAIN = pipex.c
 
-SRCS_P =	check_pid.c		utils.c		utils_2.c
+SRCS_P =	check_pid.c		utils.c		utils_2.c \
+			err_sleep.c
 
 OBJ_P = $(SRCS_P:%.c=%.o)
 

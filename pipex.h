@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:36 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/11 16:32:43 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/11 18:31:43 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ char	**generate_args(char *cmd, char **arg);
 char	**make_env(char *env_arg, char **env);
 char	*check_cmd(char *cmd);
 void	exit_child(char	**arg, char	**env);
+void	err_sleep(char *cmd1, char *cmd2);
 
 #endif

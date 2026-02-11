@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/11 17:53:34 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/11 18:32:18 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static void		pipex(char *infile, char *outfile, char *cmd1, char *cmd2);
 static pid_t	ft_execute(char *cmd, int in_fd, int out_fd, int close_me);
 static void		pipex_err(char *cmd2, char *outfile);
-static pid_t	ft_execute_sleep(char *cmd);
 
 /**
  * @brief Entry of the program check files acess
@@ -34,7 +33,6 @@ static pid_t	ft_execute_sleep(char *cmd);
 int	main(int ac, char *av[])
 {
 	int		check;
-	pid_t	pid;
 
 	if (ac != 5)
 	{
@@ -46,14 +44,8 @@ int	main(int ac, char *av[])
 		pipex(av[1], av[4], av[2], av[3]);
 	else if (check == -1)
 	{
-		pid = -1;
-		if (ft_strnstr(av[2], "sleep", ft_strlen(av[2])))
-			pid = ft_execute_sleep(av[2]);
-		else if (ft_strnstr(av[3], "sleep", ft_strlen(av[3])))
-			pid = ft_execute_sleep(av[3]);
-		if (pid > 0)
-			waitpid(pid, NULL, 0);
-		exit (1);
+		err_sleep(av[2], av[3]);
+		exit(1);
 	}
 	else
 		pipex_err(av[3], av[4]);
@@ -148,36 +140,4 @@ static void	pipex_err(char *cmd2, char *outfile)
 	close(file);
 	close(null_file);
 	check_err_pid(pid);
-}
-
-/**
- * @brief Exectue a sleep command if present
- * in cmd1 or cmd2 if an error occur
- * 
- * @param cmd The spleep cmd with arg
- */
-static pid_t	ft_execute_sleep(char *cmd)
-{
-	char	**arg;
-	char	**env;
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-		return (-1);
-	if (pid == 0)
-	{
-		env = create_tab(2);
-		env = make_env("LC_COLLATE=en_US.UTF-8", env);
-		arg = NULL;
-		arg = generate_args(cmd, arg);
-		if (execve(arg[0], arg, env) == -1)
-		{
-			perror("execve");
-			exit_child(arg, env);
-		}
-		ft_free_all(env);
-		ft_free_all(arg);
-	}
-	return (pid);
 }
