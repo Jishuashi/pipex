@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 15:34:33 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/11 15:37:42 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/11 16:35:44 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ char	**create_tab(size_t len)
 	return (res);
 }
 
-
 /**
  * @brief Free all value of a double-entry char tab
  * with tab itself 
@@ -92,16 +91,22 @@ char	**create_tab(size_t len)
  * @param tab The tab to free
  * @param len The number of collumn
  */
-void	ft_free_all(char **tab, size_t len)
+void	ft_free_all(char **tab)
 {
 	size_t	i;
 
 	i = 0;
-	while (i < len)
+	while (tab[i])
 	{
-		if (tab[i])
-			free(tab[i]);
+		free(tab[i]);
 		i++;
 	}
 	free(tab);
+}
+
+void	exit_child(char	**arg, char	**env)
+{
+	ft_free_all(env);
+	ft_free_all(arg);
+	exit(127);
 }

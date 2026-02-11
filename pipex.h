@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:36 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/11 15:36:44 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/11 16:32:43 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <errno.h>
 # include <string.h>
 
-void	ft_free_all(char **tab, size_t len);
+void	ft_free_all(char **tab);
 char	**create_tab(size_t len);
 int		check_files(char *infile, char *outfile);
 size_t	get_nb_arg(char *cmd);
@@ -31,5 +31,6 @@ void	ft_close(int file1, int file2);
 char	**generate_args(char *cmd, char **arg);
 char	**make_env(char *env_arg, char **env);
 char	*check_cmd(char *cmd);
+void	exit_child(char	**arg, char	**env);
 
 #endif

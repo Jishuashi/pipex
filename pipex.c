@@ -6,16 +6,16 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/11 14:32:42 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/11 16:35:11 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 static void		pipex(char *infile, char *outfile, char *cmd1, char *cmd2);
-static pid_t	ft_execute(char *cmd, size_t nb_arg, int in_fd, int out_fd);
+static pid_t	ft_execute(char *cmd, int in_fd, int out_fd);
 static void		pipex_err(char *cmd2, char *outfile);
-static void		ft_execute_sleep(char *cmd, size_t nb_arg);
+static void		ft_execute_sleep(char *cmd);
 
 /**
  * @brief Entry of the program check files acess
@@ -38,18 +38,17 @@ int	main(int ac, char *av[])
 		ft_putstr_fd("Not engouh argument", 2);
 		return (1);
 	}
-	check_cmd(av[2]);
 	if (check_files(av[1], av[4]) == 1)
 		pipex(av[1], av[4], av[2], av[3]);
 	else if (check_files(av[1], av[4]) == -1)
 	{
 		if (!ft_strnstr(av[2], "sleep", get_nb_arg(av[2])))
 		{
-			ft_execute_sleep(av[2], get_nb_arg(av[2]));
+			ft_execute_sleep(av[2]);
 		}
 		else if (!ft_strnstr(av[3], "sleep", get_nb_arg(av[3])))
 		{
-			ft_execute_sleep(av[3], get_nb_arg(av[3]));
+			ft_execute_sleep(av[3]);
 		}
 		return (1);
 	}
@@ -79,11 +78,11 @@ static void	pipex(char *infile, char *outfile, char *cmd1, char *cmd2)
 	if (pipe(p_fd) == -1)
 		exit(1);
 	f[0] = open(infile, O_RDONLY);
-	pid[0] = ft_execute(cmd1, get_nb_arg(cmd1), f[0], p_fd[1]);
+	pid[0] = ft_execute(cmd1, f[0], p_fd[1]);
 	close(f[0]);
 	close(p_fd[1]);
 	f[1] = open(outfile, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	pid[1] = ft_execute(cmd2, get_nb_arg(cmd2), p_fd[0], f[1]);
+	pid[1] = ft_execute(cmd2, p_fd[0], f[1]);
 	close(f[1]);
 	close(p_fd[0]);
 	check_pid(pid);
@@ -99,7 +98,7 @@ static void	pipex(char *infile, char *outfile, char *cmd1, char *cmd2)
  * @param out_fd The fd of the cmd exit
  * @return pid_t The pid of the child process
  */
-static pid_t	ft_execute(char *cmd, size_t nb_arg, int in_fd, int out_fd)
+static pid_t	ft_execute(char *cmd, int in_fd, int out_fd)
 {
 	char	**arg;
 	char	**env;
@@ -118,12 +117,10 @@ static pid_t	ft_execute(char *cmd, size_t nb_arg, int in_fd, int out_fd)
 		if (execve(arg[0], arg, env) == -1)
 		{
 			perror("execve");
-			ft_free_all(env, 2);
-			ft_free_all(arg, nb_arg);
-			exit(127);
+			exit_child(arg, env);
 		}
-		ft_free_all(env, 2);
-		ft_free_all(arg, nb_arg);
+		ft_free_all(env);
+		ft_free_all(arg);
 	}
 	return (pid);
 }
@@ -136,13 +133,13 @@ static void	pipex_err(char *cmd2, char *outfile)
 
 	null_file = open("/dev/null", O_RDONLY);
 	file = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-	pid = ft_execute(cmd2, get_nb_arg(cmd2), null_file, file);
+	pid = ft_execute(cmd2, null_file, file);
 	close(file);
 	close(null_file);
 	check_err_pid(pid);
 }
 
-static void	ft_execute_sleep(char *cmd, size_t nb_arg)
+static void	ft_execute_sleep(char *cmd)
 {
 	char	**arg;
 	char	**env;
@@ -155,11 +152,9 @@ static void	ft_execute_sleep(char *cmd, size_t nb_arg)
 	if (execve(arg[0], arg, env) == -1)
 	{
 		perror("execve");
-		free(env);
-		ft_free_all(arg, nb_arg);
-		exit(127);
+		exit_child(arg, env);
 	}
-	free(env);
-	ft_free_all(arg, nb_arg);
+	ft_free_all(env);
+	ft_free_all(arg);
 	exit(1);
 }

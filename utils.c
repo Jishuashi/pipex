@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 15:22:44 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/11 15:35:48 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/11 16:42:34 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 /**
  * @brief Close the fd of all files
- * 
- * @param file1 
- * @param file2 
+ *
+ * @param file1
+ * @param file2
  */
 void	ft_close(int file1, int file2)
 {
@@ -25,49 +25,55 @@ void	ft_close(int file1, int file2)
 }
 
 /**
- * @brief Create the tab of the arg for execve 
+ * @brief Create the tab of the arg for execve
  * with the command and all arg of the command
- * 
+ *
  * @param cmd The command to execute
  * @param arg The arg tab
- * @return char** 
+ * @return char**
  */
 char	**generate_args(char *cmd, char **arg)
 {
-	size_t	i;
-	char	*path;
-	char	**cmd_split;
-	size_t	nb_args;
+	char	**split;
+	int		i;
+	int		count;
 
-	cmd_split = ft_split(cmd, ' ');
-	path = check_cmd(cmd_split[0]);
-	nb_args = get_nb_arg(cmd);
-	arg = create_tab(nb_args);
+	split = ft_split(cmd, ' ');
+	count = 0;
+	if (!split)
+		return (NULL);
+	while (split[count])
+		count++;
+	arg = malloc(sizeof(char *) * (count + 1));
+	if (!arg)
+		return (ft_free_all(split), NULL);
+	arg[0] = check_cmd(split[0]);
 	i = 0;
-	while (i++ < nb_args)
-		arg[i] = cmd_split[i];
-	arg[0] = path;
+	while (split[++i])
+		arg[i] = ft_strdup(split[i]);
+	arg[i] = NULL;
+	ft_free_all(split);
 	return (arg);
 }
 
 /**
  * @brief Put the env var in the env aray
- * 
+ *
  * @param env_arg Var of the env
  * @param env the env
- * @return char** 
+ * @return char**
  */
 char	**make_env(char *env_arg, char **env)
 {
-	env[0] = env_arg;
+	env[0] = ft_strdup(env_arg);
 	env[1] = NULL;
 	return (env);
 }
 
 /**
- * @brief Check if the command is full path name or relative 
+ * @brief Check if the command is full path name or relative
  * path name or just command name
- * 
+ *
  * @param cmd The command to check
  * @return char* The path of the command
  */
@@ -84,21 +90,21 @@ char	*check_cmd(char *cmd)
 
 /**
  * @brief Get the nb arg int the cmd string
- * 
+ *
  * @param cmd The cmd string with arg
  * @return size_t The number of the arg of cmd  + cmd itself
  */
 size_t	get_nb_arg(char *cmd)
 {
-	char		**cmd_split;
-	size_t		res;
-	size_t		i;
+	char	**cmd_split;
+	size_t	res;
+	size_t	i;
 
 	cmd_split = ft_split(cmd, ' ');
 	i = 0;
 	while (cmd_split[i] != NULL)
 		i++;
 	res = i;
-	ft_free_all(cmd_split, res);
+	ft_free_all(cmd_split);
 	return (res);
 }
