@@ -9,3 +9,5 @@ checker_linux
 *.sh
 42_pipex_tester
 testcmd
+outfiles
+infiles

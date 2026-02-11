@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/04 19:20:38 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/10 19:43:26 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/11 17:46:07 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,8 @@ void	check_pid(pid_t pid[2])
 	int	status1;
 	int	status2;
 
-	if (waitpid(pid[0], &status1, 0) == -1)
-	{
-		perror("waitpid");
-		exit(1);
-	}
-	if (waitpid(pid[1], &status2, 0) == -1)
-	{
-		perror("waitpid");
-		exit(1);
-	}
+	waitpid(pid[1], &status2, 0);
+	waitpid(pid[0], &status1, 0);
 	check_status(status2);
 }
 

@@ -6,14 +6,14 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/11 17:37:39 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/11 17:53:34 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 static void		pipex(char *infile, char *outfile, char *cmd1, char *cmd2);
-static pid_t	ft_execute(char *cmd, int in_fd, int out_fd);
+static pid_t	ft_execute(char *cmd, int in_fd, int out_fd, int close_me);
 static void		pipex_err(char *cmd2, char *outfile);
 static pid_t	ft_execute_sleep(char *cmd);
 
@@ -81,13 +81,13 @@ static void	pipex(char *infile, char *outfile, char *cmd1, char *cmd2)
 	if (pipe(p_fd) == -1)
 		exit(1);
 	f[0] = open(infile, O_RDONLY);
-	pid[0] = ft_execute(cmd1, f[0], p_fd[1]);
-	close(f[0]);
+	pid[0] = ft_execute(cmd1, f[0], p_fd[1], p_fd[0]);
 	close(p_fd[1]);
+	close(f[0]);
 	f[1] = open(outfile, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	pid[1] = ft_execute(cmd2, p_fd[0], f[1]);
-	close(f[1]);
+	pid[1] = ft_execute(cmd2, p_fd[0], f[1], -1);
 	close(p_fd[0]);
+	close(f[1]);
 	check_pid(pid);
 }
 
@@ -101,7 +101,7 @@ static void	pipex(char *infile, char *outfile, char *cmd1, char *cmd2)
  * @param out_fd The fd of the cmd exit
  * @return pid_t The pid of the child process
  */
-static pid_t	ft_execute(char *cmd, int in_fd, int out_fd)
+static pid_t	ft_execute(char *cmd, int in_fd, int out_fd, int close_me)
 {
 	char	**arg;
 	char	**env;
@@ -115,6 +115,7 @@ static pid_t	ft_execute(char *cmd, int in_fd, int out_fd)
 		dup2(in_fd, 0);
 		dup2(out_fd, 1);
 		ft_close(in_fd, out_fd);
+		close(close_me);
 		env = create_tab(2);
 		env = make_env("LC_COLLATE=en_US.UTF-8", env);
 		arg = generate_args(cmd, arg);
@@ -143,7 +144,7 @@ static void	pipex_err(char *cmd2, char *outfile)
 
 	null_file = open("/dev/null", O_RDONLY);
 	file = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-	pid = ft_execute(cmd2, null_file, file);
+	pid = ft_execute(cmd2, null_file, file, -1);
 	close(file);
 	close(null_file);
 	check_err_pid(pid);
