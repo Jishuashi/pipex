@@ -1,38 +1,40 @@
-NAME = pipex
+NAME        = pipex
+LIBFT_DIR   = libft
+LIBFT       = $(LIBFT_DIR)/libft.a
 
-LIB = pipex.a
+CC          = cc
+CFLAGS      = -Wall -Wextra -Werror -g
+RM          = rm -f
 
-LIBFT = libft
+MAIN        = pipex.c
+SRCS        = check_pid.c utils.c utils_2.c err_sleep.c
+OBJS        = $(SRCS:.c=.o)
 
-MAIN = pipex.c
+GREEN       = \033[0;32m
+RESET       = \033[0m
 
-SRCS_P =	check_pid.c		utils.c		utils_2.c \
-			err_sleep.c
+all: $(NAME)
 
-OBJ_P = $(SRCS_P:%.c=%.o)
+$(NAME): $(LIBFT) $(OBJS) $(MAIN)
+	@echo -e "$(GREEN)Compiling $(NAME)...$(RESET)"
+	$(CC) $(CFLAGS) $(MAIN) $(OBJS) $(LIBFT) -o $(NAME)
 
-CFLAGS = -Wall -Wextra -Werror -g
+$(LIBFT):
+	@$(MAKE) -C $(LIBFT_DIR) all
 
-all : $(NAME)
-
-$(NAME): makelib
-	cc $(CFLAGS) $(MAIN) $(LIB) -o $(NAME)
-
-makelib: $(OBJ_P)
-	$(MAKE) -C $(LIBFT) all
-	cp libft/libft.a $(NAME).a
-	ar rcs $(NAME).a $(OBJ_P)
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ_P)
-	$(MAKE) -C $(LIBFT) clean
+	@echo "Cleaning objects..."
+	$(RM) $(OBJS)
+	@$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	rm -f $(NAME)
-	rm -f $(LIB)
-	$(MAKE) -C $(LIBFT) fclean
+	@echo "Cleaning executable and library..."
+	$(RM) $(NAME)
+	@$(MAKE) -C $(LIBFT_DIR) fclean
 
-re: fclean clean all
-	$(MAKE) -C $(LIBFT) re
+re: fclean all
 
-.PHONY: all clean fclean re makelib
+.PHONY: all clean fclean re
