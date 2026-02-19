@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/11 18:32:18 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/19 15:49:56 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	main(int ac, char *av[])
 		pipex(av[1], av[4], av[2], av[3]);
 	else if (check == -1)
 	{
-		err_sleep(av[2], av[3]);
+		err_sleep(av[2], av[3], av[1], av[4]);
 		exit(1);
 	}
 	else
