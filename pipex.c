@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/25 11:49:48 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/25 18:02:26 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,10 +113,7 @@ static pid_t	ft_execute(char *cmd, int in_fd, int out_fd, int close_me)
 		env = make_env("LC_COLLATE=en_US.UTF-8", env);
 		arg = generate_args(cmd, arg);
 		if (execve(arg[0], arg, env) == -1)
-		{
-			perror("execve");
 			exit_child(arg, env);
-		}
 		ft_free_all(env);
 		ft_free_all(arg);
 	}
@@ -137,7 +134,7 @@ static void	pipex_err(char *cmd2, char *outfile)
 
 	null_file = open("/dev/null", O_RDONLY);
 	file = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-	if (cmd_is_empty(cmd2) == 0)
+	if (cmd_is_empty(cmd2) == 1)
 	{
 		close(file);
 		close(null_file);

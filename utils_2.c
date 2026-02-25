@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 15:34:33 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/25 11:48:57 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/25 18:02:40 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,23 @@ void	ft_free_all(char **tab)
 
 void	exit_child(char	**arg, char	**env)
 {
+	int	exit_status;
+	int	saved_errno;
+
+	saved_errno = errno;
+	exit_status = 1;
+	if (saved_errno == EACCES)
+		exit_status = 126;
+	else if (saved_errno == ENOENT)
+		exit_status = 127;
+	if (arg && arg[0])
+	{
+		ft_putstr_fd(arg[0], 2);
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(strerror(saved_errno), 2);
+		ft_putstr_fd("\n", 2);
+	}
 	ft_free_all(env);
 	ft_free_all(arg);
-	exit(127);
+	exit(exit_status);
 }
