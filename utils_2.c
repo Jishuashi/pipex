@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 15:34:33 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/11 16:35:44 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/25 11:48:57 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,14 @@ int	check_files(char *infile, char *outfile)
  * 
  * @param cmd 
  */
-void	cmd_is_empty(char *cmd)
+int	cmd_is_empty(char *cmd)
 {
 	if (cmd[0] == '\0')
 	{
 		ft_putstr_fd(" : command not found\n", 2);
-		exit(127);
+		return (1);
 	}
+	return (0);
 }
 
 /**

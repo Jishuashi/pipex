@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 15:22:44 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/11 16:50:40 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/25 11:56:50 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ char	**generate_args(char *cmd, char **arg)
 	int		i;
 	int		count;
 
+	if (is_just_space(cmd))
+		return (space_arg(cmd, arg));
 	split = ft_split(cmd, ' ');
 	count = 0;
 	if (!split)

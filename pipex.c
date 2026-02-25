@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/19 15:49:56 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/25 11:49:48 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	main(int ac, char *av[])
 		return (1);
 	}
 	check = check_files(av[1], av[4]);
-	if (check == 1)
+	if (check == 1 && !cmd_is_empty(av[3]))
 		pipex(av[1], av[4], av[2], av[3]);
 	else if (check == -1)
 	{
@@ -73,6 +73,8 @@ static void	pipex(char *infile, char *outfile, char *cmd1, char *cmd2)
 	if (pipe(p_fd) == -1)
 		exit(1);
 	f[0] = open(infile, O_RDONLY);
+	pid[0] = -1;
+	pid[1] = -1;
 	pid[0] = ft_execute(cmd1, f[0], p_fd[1], p_fd[0]);
 	close(p_fd[1]);
 	close(f[0]);
@@ -99,7 +101,6 @@ static pid_t	ft_execute(char *cmd, int in_fd, int out_fd, int close_me)
 	char	**env;
 	pid_t	pid;
 
-	cmd_is_empty(cmd);
 	pid = fork();
 	arg = NULL;
 	if (pid == 0)
@@ -136,6 +137,12 @@ static void	pipex_err(char *cmd2, char *outfile)
 
 	null_file = open("/dev/null", O_RDONLY);
 	file = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	if (cmd_is_empty(cmd2) == 0)
+	{
+		close(file);
+		close(null_file);
+		exit(126);
+	}
 	pid = ft_execute(cmd2, null_file, file, -1);
 	close(file);
 	close(null_file);

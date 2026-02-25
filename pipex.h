@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:36 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/19 15:49:50 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/02/25 11:56:40 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,14 @@ int		check_files(char *infile, char *outfile);
 size_t	get_nb_arg(char *cmd);
 void	check_pid(pid_t pid[2]);
 void	check_err_pid(pid_t pid);
-void	cmd_is_empty(char *cmd);
+int		cmd_is_empty(char *cmd);
 void	ft_close(int file1, int file2);
 char	**generate_args(char *cmd, char **arg);
 char	**make_env(char *env_arg, char **env);
 char	*check_cmd(char *cmd);
 void	exit_child(char	**arg, char	**env);
 void	err_sleep(char *cmd1, char *cmd2, char	*in, char *out);
+int		is_just_space(char *cmd);
+char	**space_arg(char *cmd, char **arg);
 
 #endif

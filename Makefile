@@ -7,7 +7,7 @@ CFLAGS      = -Wall -Wextra -Werror -g
 RM          = rm -f
 
 MAIN        = pipex.c
-SRCS        = check_pid.c utils.c utils_2.c err_sleep.c
+SRCS        = check_pid.c utils.c utils_2.c err_sleep.c utils_3.c
 OBJS        = $(SRCS:.c=.o)
 
 GREEN       = \033[0;32m
