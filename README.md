@@ -62,28 +62,6 @@ Notes and assumptions:
 - `outfile` is created or truncated; file permissions follow the system
 	defaults used when creating a file with `open(2)`.
 
-### Error handling
-- Errors (for example: open failures, fork/exec errors, pipe failures) are
-	printed to `stderr` with a short message describing the reason.
-- The program attempts to free resources before exiting when possible.
-- Exit codes follow conventional meanings: non-zero on error; the program may
-	propagate child exit statuses where meaningful.
-
-## Behaviour details
-- Parent process creates a pipe and forks two children (one for each command).
-- The first child redirects its stdin from `infile` and its stdout to the
-	write end of the pipe.
-- The second child redirects its stdin from the read end of the pipe and its
-	stdout to `outfile`.
-- The parent closes unused file descriptors and waits for both children to
-	finish before exiting.
-
-## Testing
-There is a `test` directory in the repository with sample input and output
-files and a small test script to exercise the basic behavior. To run those
-tests, inspect the scripts inside `test/` and run them according to their
-instructions (some scripts may assume you built the `pipex` executable).
-
 ## Ressources
 - Using file descriptors and pipes (reference):
 	https://www.ibm.com/docs/fr/aix/7.3.0?topic=volumes-using-file-descriptors
