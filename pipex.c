@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 17:29:11 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/25 18:02:26 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/03/04 15:17:46 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	main(int ac, char *av[])
 
 	if (ac != 5)
 	{
-		ft_putstr_fd("Not engouh argument", 2);
+		ft_putstr_fd("Bad number of arguments", 2);
 		return (1);
 	}
 	check = check_files(av[1], av[4]);

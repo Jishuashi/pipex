@@ -6,7 +6,7 @@
 /*   By: hchartie <hchartie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/04 19:20:38 by hchartie          #+#    #+#             */
-/*   Updated: 2026/02/25 11:51:27 by hchartie         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:27:11 by hchartie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,17 @@ static	void	check_status(int status);
  */
 void	check_pid(pid_t pid[2])
 {
+	int	status1;
 	int	status2;
 
+	status1 = 0;
 	status2 = 0;
 	if (pid[1] > 0)
 		waitpid(pid[1], &status2, 0);
+	if (pid[0] > 0)
+		waitpid(pid[0], &status1, 0);
 	check_status(status2);
+	check_status(status1);
 }
 
 /**
