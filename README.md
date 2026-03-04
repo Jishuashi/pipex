@@ -1,30 +1,96 @@
-*This project has been created as part of the 42 curriculum by hchartie*
+*This project was created as part of the 42 curriculum by hchartie.*
 
 # PIPEX
 
 ## Description
-The goal of this program is to recreate the behavior of 
+The `pipex` program reproduces the basic behavior of a shell pipeline of the
+form:
+
 ```BASH
-< infile cmd1 | cmd 2 > outfile
+< infile cmd1 | cmd2 > outfile
 ```
-of the Linux system
+
+It opens `infile`, executes `cmd1` with its stdin redirected from `infile`,
+pipes the stdout of `cmd1` into the stdin of `cmd2`, and writes the final
+output into `outfile` (creating or truncating it). The implementation is a
+small exercise in process creation, file descriptor manipulation, and using
+UNIX pipes.
+
+This project intentionally implements the minimal features required by the
+42 assignment: handling exactly two commands and basic redirections.
 
 ## Instruction
-> To compile the code you need to :\
+
+### Clone the project
 ```BASH
+git clone https://github.com/Jishuashi/pipex.git
+```
+And go in the folder
+
+```BASH
+cd pipex
+```
+
+### Build
+To compile the program run:
+
+```bash
 make all
 ```
-> To use the programe you need to give array of int like 
-this
-```BASH
-./pipex infile "cmd1 arg{...}" "cmd2 arg{...}" outfile
+
+This will produce an executable named `pipex` in the project root.
+
+### Usage
+The program expects exactly four arguments (infile, cmd1, cmd2, outfile):
+
+```bash
+./pipex infile "cmd1 arg1 arg2" "cmd2 argA argB" outfile
 ```
-> If an error occur print the resaon of the error in the stderr output
+
+Examples:
+
+```bash
+./pipex input.txt "grep hello" "wc -l" output.txt
+./pipex /etc/passwd "cut -d: -f1" "sort" users_sorted.txt
+```
+
+Notes and assumptions:
+- Commands are provided as a single string and should be parsed into argv
+	tokens by the program (space-separated; quoted arguments are supported in
+	the shell but the program receives a single string to parse).
+- Only two commands are supported (no chaining of more than two commands).
+- `outfile` is created or truncated; file permissions follow the system
+	defaults used when creating a file with `open(2)`.
+
+### Error handling
+- Errors (for example: open failures, fork/exec errors, pipe failures) are
+	printed to `stderr` with a short message describing the reason.
+- The program attempts to free resources before exiting when possible.
+- Exit codes follow conventional meanings: non-zero on error; the program may
+	propagate child exit statuses where meaningful.
+
+## Behaviour details
+- Parent process creates a pipe and forks two children (one for each command).
+- The first child redirects its stdin from `infile` and its stdout to the
+	write end of the pipe.
+- The second child redirects its stdin from the read end of the pipe and its
+	stdout to `outfile`.
+- The parent closes unused file descriptors and waits for both children to
+	finish before exiting.
+
+## Testing
+There is a `test` directory in the repository with sample input and output
+files and a small test script to exercise the basic behavior. To run those
+tests, inspect the scripts inside `test/` and run them according to their
+instructions (some scripts may assume you built the `pipex` executable).
+
 ## Ressources
-Radix sort:\
-https://www.ibm.com/docs/fr/aix/7.3.0?topic=volumes-using-file-descriptors
-https://www.codequoi.com/manipuler-un-fichier-a-laide-de-son-descripteur-en-c/\
-Man Page of functions
+- Using file descriptors and pipes (reference):
+	https://www.ibm.com/docs/fr/aix/7.3.0?topic=volumes-using-file-descriptors
+- Guide to manipulating files via their file descriptors (French):
+	https://www.codequoi.com/manipuler-un-fichier-a-laide-de-son-descripteur-en-c/
+- Standard man pages for system calls used: `pipe(2)`, `fork(2)`, `dup2(2)`,
+	`execve(2)`, `open(2)`, `waitpid(2)`.
 
 ### IA usage
-> AI was used in guided learning mode to explain file descriptors and pipes.
+AI was used in guided learning mode to explain file descriptors and pipes.
